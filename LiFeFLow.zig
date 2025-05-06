@@ -32,6 +32,22 @@ pub fn main() !void {
     debug_print("\n", .{});
     const real_Months = (55 * 12) + 4;
     debug_print("real_Months since UTC 1970-01-01 {any}\n", .{real_Months});
+
+    var seconds_Elapsed = seconds;
+    const seconds_In_Year = 365 * 24 * 60 * 60;
+    const seconds_In_Leap_Year = seconds_In_Year + (24 * 60 * 60);
+    var present_Year: i16 = 1970;
+    while (seconds_Elapsed > seconds_In_Year) {
+        if (@mod(years, 4) == 0 and @mod(years, 400) != 0) {
+            seconds_Elapsed -= seconds_In_Leap_Year;
+        } else {
+            seconds_Elapsed -= seconds_In_Year;
+        }
+        present_Year += 1;
+    }
+
+    debug_print("present_Year: {any}\n", .{present_Year});
+
     const current_Second = @mod(seconds, 60);
     const current_Minute = @mod(minutes, 60);
     const current_Hour = @mod(hours, 24);
@@ -48,7 +64,7 @@ pub fn main() !void {
     debug_print("current_Year: {any}\n", .{current_Year});
     debug_print("\n", .{});
 
-    //debug_print("std.time.epoch.Year {any}\n", .{std.time.epoch.Year});
+    //  debug_print("std.time.epoch.Year {any}\n", .{std.time.epoch.Year});
 }
 //check out std.time.epoch
 
