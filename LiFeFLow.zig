@@ -38,7 +38,11 @@ pub fn main() !void {
     const seconds_In_Leap_Year = seconds_In_Year + (24 * 60 * 60);
     var present_Year: i16 = 1970;
     while (seconds_Elapsed > seconds_In_Year) {
-        if (@mod(years, 4) == 0 and @mod(years, 400) != 0) {
+        if (@mod(present_Year, 400) == 0) {
+            seconds_Elapsed -= seconds_In_Leap_Year;
+        } else if (@mod(present_Year, 100) == 0) {
+            seconds_Elapsed -= seconds_In_Year;
+        } else if (@mod(present_Year, 4) == 0) {
             seconds_Elapsed -= seconds_In_Leap_Year;
         } else {
             seconds_Elapsed -= seconds_In_Year;
