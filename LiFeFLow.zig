@@ -1,8 +1,16 @@
-//BELOW is just a struct scaffolding for the above noted fields
-const Node = struct {
-    value: i8,
-    //Should next node pointer point to a node, or another pointer?
-    next_node_pointer: ?*Node,
+const TimeInfo = struct {
+    planned_start_time: u32,
+    planned_end_time: u32,
+    actual_start_time: u32,
+    actual_end_time: u32,
+};
+
+var Block = struct {
+    times: TimeInfo,
+};
+
+var Core_Item = struct {
+    times: TimeInfo,
 };
 
 //SAVE data to file in JSON format (much like Trello does)
@@ -75,12 +83,6 @@ pub fn main() !void {
 //At the end of the day, even in Trello I am simply writing text in a text box
 
 //What I don't like about Trello:
-
-//FIELDS
-//Time: Proposed Block Start        Proposed Block End
-//Time: Actual Block Start          Actual Block End
-//Time: Proposed Item Start         Proposed Item End
-//Time: Actual Item Start           Actual Item End
 
 //BELOW Is just an example of how to save to JSON
 // const weightStruct = struct { Weight0: f32, Weight1: f32, Weight2: f32 };
