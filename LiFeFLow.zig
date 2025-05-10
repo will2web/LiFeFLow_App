@@ -43,15 +43,16 @@ pub fn main() !void {
     try printconvertedTime(std.time.timestamp());
 
     //  debug_print("std.time.epoch.Year {any}\n", .{std.time.epoch.Year});
+    debug_print("\n\n\n", .{});
 }
 
-const DaysPerMonth = [_]u8{ 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
+const DaysPerMonth = [_]i64{ 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
 
-fn isLeapYear(year: i32) bool {
+fn isLeapYear(year: i64) bool {
     return (@rem(year, 4) == 0 and @rem(year, 100) != 0) or (@rem(year, 400) == 0);
 }
 
-fn daysInMonth(month: usize, year: i32) u8 {
+fn daysInMonth(month: usize, year: i64) i64 {
     if (month == 1 and isLeapYear(year)) return 29;
     return DaysPerMonth[month];
 }
@@ -98,14 +99,39 @@ fn printconvertedTime(time_In_Seconds: i64) !void {
     };
     const suffix = if (is_pm) "PM" else "AM";
 
+    const my_other_i64: i64 = 9;
+    const my_other_u8: u8 = @as(u8, my_other_i64);
+    try stdout.print("my_other_u8: {!s}\n", .{intToTime(my_other_u8)});
+    try stdout.print("direct casting my_other_u64: {!s}\n", .{intToTime(@as(u8, my_other_i64))});
+
     try stdout.print(
         "Formatted Time: {d}-{d}-{d} {d}:{d}:{d} {s}\n",
         //"Formatted Time: {d}-{d}-{d} {d}:{d}:{d} {s}\n",
         //
         .{ month + 1, day, year, hour12, minute, second, suffix },
     );
+    try stdout.print("intToTime(@as(u8, day)): {!s}\n", .{intToTime(@as(u8, day))});
 
-    try stdout.print("Time: {d}-{d}-{d} {d}:{d}:{d} {s}\n", .{ month + 1, day, year, hour12, minute, second, suffix });
+    // try stdout.print("Time: {!s}-{!s}-{!s} {!s}:{!s}:{!s} {s}\n", .{ intToTime(@intCast(month + 1)), intToTime(day), intToTime(year), intToTime(hour12), intToTime(minute), intToTime(second), suffix });
+}
+
+fn intToTime(value: u8) ![]u8 {
+    const base: u8 = 10; // Decimal base
+    const case: std.fmt.Case = .lower; // Case doesn't matter for numbers
+
+    var options: std.fmt.FormatOptions = .{};
+    options.width = 2; // Ensure at least 2 characters in the output
+    options.fill = '0'; // Use '0' as the padding character
+
+    var buffer: [32]u8 = undefined; // A buffer to hold the formatted string
+    var stream = std.io.fixedBufferStream(&buffer); // Make 'stream' mutable
+    const writer = stream.writer();
+
+    try std.fmt.formatInt(value, base, case, options, writer);
+
+    const formatted_string = stream.getWritten();
+    //    std.debug.print("Formatted value: '{s}'\n", .{formatted_string});
+    return formatted_string;
 }
 
 //check out std.time.epoch
