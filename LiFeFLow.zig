@@ -84,19 +84,20 @@ fn printconvertedTime(time_In_Seconds: i64) !void {
     }
 
     const day = @divTrunc(remaining, 86400) + 1;
-    try stdout.print("day {d}\n", .{day});
-    var buffer: [8]u8 = undefined;
-    var stream = std.io.fixedBufferStream(&buffer);
-    const writer = stream.writer();
-    const options: std.fmt.FormatOptions = .{ .width = 2, .fill = '0' };
-    try std.fmt.formatInt(day, 10, .lower, options, writer);
-    const formatted_day = stream.getWritten();
-    std.debug.print("Day of Month (formatted): '{d}'\n", .{formatted_day});
 
-    const allocator = std.heap.page_allocator;
-    const format_day = try formatTwoDigitInt(allocator, day);
+    // try stdout.print("day {d}\n", .{day});
+    // var buffer: [8]u8 = undefined;
+    // var stream = std.io.fixedBufferStream(&buffer);
+    // const writer = stream.writer();
+    // const options: std.fmt.FormatOptions = .{ .width = 2, .fill = '0' };
+    // try std.fmt.formatInt(day, 10, .lower, options, writer);
+    // const formatted_day = stream.getWritten();
+    // std.debug.print("Day of Month (formatted): '{d}'\n", .{formatted_day});
 
-    std.debug.print("format_day: {s}\n", .{format_day});
+    // const allocator = std.heap.page_allocator;
+    // const format_day = try formatTwoDigitInt(allocator, day);
+
+    // std.debug.print("format_day: {s}\n", .{format_day});
 
     remaining = @rem(remaining, 86400);
 
@@ -113,19 +114,19 @@ fn printconvertedTime(time_In_Seconds: i64) !void {
     };
     const suffix = if (is_pm) "PM" else "AM";
 
+    //    try stdout.print("Time: {!s}-{!s}-{!s} {!s}:{!s}:{!s} {s}\n", .{ intToTime(@intCast(month + 1)), intToTime(day), intToTime(year), intToTime(hour12), intToTime(minute), intToTime(second), suffix });
+
     //    const my_other_i64: i64 = 9;
     //    const my_other_u8: u8 = @as(u8, my_other_i64);
     //    try stdout.print("my_other_u8: {!s}\n", .{intToTime(my_other_u8)});
     //    try stdout.print("direct casting my_other_u64: {!s}\n", .{intToTime(@as(u8, my_other_i64))});
 
-    // try stdout.print(
-    //     "Formatted Time: {d}-{d}-{d} {d}:{d}:{d} {s}\n",
-    //     //"Formatted Time: {d}-{d}-{d} {d}:{d}:{d} {s}\n",
-    //     //
-    //     .{ month + 1, day, year, hour12, minute, second, suffix },
-    //);
-
-    try stdout.print("Time: {!s}-{!s}-{!s} {!s}:{!s}:{!s} {s}\n", .{ intToTime(@intCast(month + 1)), intToTime(day), intToTime(year), intToTime(hour12), intToTime(minute), intToTime(second), suffix });
+    try stdout.print(
+        "Formatted Time: {d}-{d}-{d} {d}:{d}:{d} {s}\n",
+        //"Formatted Time: {d}-{d}-{d} {d}:{d}:{d} {s}\n",
+        //
+        .{ month + 1, day, year, hour12, minute, second, suffix },
+    );
 }
 
 fn formatTwoDigitInt(allocator: std.mem.Allocator, value: i64) ![]const u8 {
